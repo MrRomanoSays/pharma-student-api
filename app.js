@@ -1,11 +1,35 @@
 const express = require('express')
 const app = express()
+const dalModule = process.env.DAL || 'nosql';
+const dal = dalModule === 'nosql' ? 'dal.js' : 'dal-mysql.js'
+const {
+    getMed,
+    getUniqueForms,
+    listMedsByLabel,
+    getUniqueIngredients,
+    listMedsByIngredient,
+    listMedsByForm,
+    updatePharmacy,
+    addPharmacy,
+    getPharmacy,
+    listPharmacies,
+    deletePharmacy,
+    addPatient,
+    getPatients,
+    listPatientsByLastName,
+    getUniqueConditions,
+    listPatientsByCondition,
+    updatePatient,
+    deletePatient,
+    getPatient,
+    addMed,
+    updateMed,
+    deleteMed
+} = require('./' + dal)
 
-const { getUniqueForms, listMedsByLabel, getUniqueIngredients, listMedsByIngredient,
-        listMedsByForm, getMed, updatePharmacy, addPharmacy, getPharmacy, listPharmacies, deletePharmacy,
-        addPatient, getPatients, listPatientsByLastName, getUniqueConditions, listPatientsByCondition,
-        updatePatient, deletePatient, getPatient, addMed, updateMed, deleteMed} = require('./dal.js')
-const { split } = require('ramda')
+const {
+    split
+} = require('ramda')
 
 const bodyParser = require('body-parser')
 
@@ -42,7 +66,7 @@ app.get('/medications', function(req, res, next) {
             console.log(startkey + " " + limit) //working...
             if (err) return next(new HTTPError(err.status, err.message, err))
             res.status(200).send(meds)
-          })
+        })
     } else {
         res.status(200).send([])
     }
@@ -217,12 +241,12 @@ app.get('/pharmacies', function(req, res, next) {
         const limit = req.query.limit ? req.query.limit : undefined
 
         listPharmacies(startKey, limit, function(err, pharmacyList) {
-          if (err) return next(new HTTPError(err.status, err.message, err))
-          res.status(200).send(pharmacyList)
+            if (err) return next(new HTTPError(err.status, err.message, err))
+            res.status(200).send(pharmacyList)
         })
     } else {
         return res.status(200).send([])
-        }
+    }
 })
 
 

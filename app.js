@@ -142,8 +142,9 @@ app.get('/patients', function(req, res, next) {
             res.status(200).send(patient)
         })
     } else if (!req.query.filter) {
-
-        getPatients(function(err, patients) {
+      const startkey = req.query.startkey ? req.query.startkey : undefined
+      const limit = req.query.limit ? req.query.limit : undefined
+        getPatients(startkey, limit, function(err, patients) {
             if (err) return next(new HTTPError(err.status, err.message, err))
             res.status(200).send(patients)
         })

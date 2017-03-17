@@ -110,3 +110,14 @@ VALUES
 , (5, 'esomeprazole')
 , (6, 'acetaminophen')
 , (6, 'hydrocodone');
+
+CREATE VIEW medWithIngredients AS
+SELECT m.ID AS ID
+,m.name AS name
+,m.label AS label
+,m.amount AS amount
+,m.unit AS unit
+,m.form AS form
+,mi.ingredient AS ingredient
+FROM med m
+LEFT JOIN medIngredient mi on m.ID = mi.medID;
